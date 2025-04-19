@@ -14,7 +14,7 @@ This project is composed of three parts:
 
 The Flutter app is a MQTT Client that allows you set either secure or non secure communication with the broker, at the moment websocket is not implemented. 
 
-You can find on link below how to set up certificatesa for secure communication with the broker hosted on AWS:
+You can find on link below how to set up certificatesa for secure communication with the broker hosted on AWS in Tia Portal:
 
 https://www.youtube.com/watch?v=yOqHG6bxKAY
 
