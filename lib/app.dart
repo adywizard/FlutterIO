@@ -54,7 +54,7 @@ class _MainAppState extends ConsumerState<MainApp> with WidgetsBindingObserver {
         final darkColorScheme =
             darkDynamic ??
             ColorScheme.fromSeed(
-              seedColor: const Color(0xFF6750A4),
+              seedColor: const Color.fromARGB(255, 80, 164, 80),
               brightness: Brightness.dark,
               surfaceContainerHighest: const Color(0xFF1C1B1F),
             ).harmonized();

@@ -109,11 +109,14 @@ class SettingsTile extends ConsumerWidget {
     final provider = ref.watch(providerType.getProvider());
     bool showUnmasked = false;
     return Card(
-      clipBehavior: Clip.hardEdge,
-      color: Theme.of(context).colorScheme.onInverseSurface,
+      elevation: 0,
       child: StatefulBuilder(
         builder:
             (context, setState) => ListTile(
+              tileColor: Theme.of(context).colorScheme.onInverseSurface,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.0),
+              ),
               title: Text(type.name),
               subtitle: Text(
                 provider.hasValue

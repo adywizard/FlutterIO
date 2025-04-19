@@ -7,6 +7,8 @@ class SettingsBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SafeArea(
       child: ListView(
+        padding: const EdgeInsets.all(8.0),
+
         children: [
           const Text(
             'User',
