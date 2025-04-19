@@ -8,7 +8,7 @@ This project is composed of three parts:
 
 1) Multiplatform App made with flutter (version 3.29.3 used)
 
-2) PLC program made with Tia Portal Profesional v19
+2) PLC program made with Tia Portal Profesional v19 (Folder TiaIO in this project)
 
 3) FactoryIO Scene Sorting by height Advanced (FactoryIO version 2.5.4 used)
 
