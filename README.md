@@ -22,8 +22,12 @@ Give the guy thumbs up!
 
 The app can also be used on non secure port (1883) either localy or over internet, it's up to you how you want to implement your broker.
 
-for local communication you can use Mosquitto broke which is open surce project, download link: https://mosquitto.org/
+for local communication you can use open source Mosquitto broker, download link: https://mosquitto.org/
 
 Guide for setting it up: https://www.youtube.com/watch?v=2S_kZo_ElxY
 
 Give a credit to that guy!
+
+![Screenshot](screenshots/home.jpeg)
+
+![Screenshot](screenshots/settings.jpeg)
