@@ -28,6 +28,7 @@ Guide for setting it up: https://www.youtube.com/watch?v=2S_kZo_ElxY
 
 Give a credit to that guy!
 
-![Screenshot](screenshots/home.jpeg)
+<image src="screenshots/home.jpeg" width="175" height="350" alt="Home screen">
+
 
 ![Screenshot](screenshots/settings.jpeg)
