@@ -223,17 +223,29 @@ class MqttProvider extends AsyncNotifier<List<int>> {
       ]);
       return;
     }
-    final message = data.getUint8(0);
 
+    final message = data.getUint8(0);
     final sensorState = message == 1 ? "ON" : "OFF";
 
-    final description =
-        TopicsIn.values
-            .firstWhere((element) => element.name == topic)
-            .description;
-    _showSensorMessage(
-      "Received message: $sensorState from sensor: $description",
-    );
+    if (topic == TopicsIn.topicPlcOnline.name) {
+      _showSensorMessage("PLC is online");
+      return;
+    } else if (topic == TopicsIn.topicAtEntry.name) {
+      _showSensorMessage("At Entry sensor triggered $sensorState");
+      return;
+    } else if (topic == TopicsIn.topicAtLoad.name) {
+      _showSensorMessage("At Load sensor triggered $sensorState");
+      return;
+    } else if (topic == TopicsIn.topicAtUnload.name) {
+      _showSensorMessage("At Unload sensor triggered $sensorState");
+      return;
+    } else if (topic == TopicsIn.topicAtleft.name) {
+      _showSensorMessage("At Left sensor triggered $sensorState");
+      return;
+    } else if (topic == TopicsIn.topicAtRight.name) {
+      _showSensorMessage("At Right sensor triggered $sensorState");
+      return;
+    }
   }
 
   void disconnect() async {

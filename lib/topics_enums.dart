@@ -36,8 +36,8 @@ enum TopicsIn {
   ),
   topicBoxCountBig(name: '/sensors/boxCountBig', description: 'Box Count Big'),
   topicBoxTotal(name: 'sensors/boxTotal', description: 'Box Count Total'),
-  topicAtEnd(name: '/sensors/atEnd', description: 'Ended connection'),
-  topicAtStart(name: '/sensors/atStart', description: 'Beginning connection');
+
+  topicPlcOnline(name: 'plc/online', description: 'PLC Online');
 
   const TopicsIn({required this.name, required this.description});
 

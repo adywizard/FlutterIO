@@ -1,5 +1,5 @@
 import 'package:factoryio_app/all_imports.dart';
-import 'package:factoryio_app/screens/chart.dart';
+import 'package:factoryio_app/screens/chart_page.dart';
 
 final countProvider = StateProvider<int>((ref) => 0);
 
