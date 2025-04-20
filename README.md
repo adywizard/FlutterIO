@@ -1,4 +1,4 @@
-# factoryio_app
+# FlutterIO App
 
 A Flutter application designed to interface with Factory I/O simulation software using mqtt protocol. This app enables remote monitoring and control of virtual factory environment (Sorting by height Advanced scene), providing real-time data visualization and process management capabilities.
 It's a small example of how to integrate mobile development with Operational Technology.
@@ -25,8 +25,9 @@ for local communication you can use open source Mosquitto broker, download link:
 Guide for setting it up: https://www.youtube.com/watch?v=2S_kZo_ElxY
 Give a credit to that guy!
 
-Short video at this link: https://youtu.be/geyDemxGkSw be aware that quality of the video is not so grate!
+#Short video at this link: https://youtu.be/geyDemxGkSw be aware that quality of the video is not so grate!
 
+#Also some screenshots:
 
 ![Screenshot](screenshots/home.jpeg)
 
