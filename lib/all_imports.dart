@@ -31,3 +31,4 @@ export 'package:file_picker/file_picker.dart';
 export 'package:flutter_riverpod/flutter_riverpod.dart';
 export 'package:mqtt_client/mqtt_client.dart';
 export 'package:mqtt_client/mqtt_server_client.dart';
+export 'package:fl_chart/fl_chart.dart';

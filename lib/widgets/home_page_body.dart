@@ -34,7 +34,7 @@ class HomePageBody extends StatelessWidget {
             childAspectRatio: aspectRatio,
             padding: const EdgeInsets.all(16),
             children: [
-              for (int i = 0; i < Topics.values.length - 2; i++)
+              for (int i = 0; i < Topics.values.length - 3; i++)
                 MqttButton(
                   topic: Topics.values[i].name,
                   label: Topics.values[i].description,

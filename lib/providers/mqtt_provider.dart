@@ -32,7 +32,7 @@ class MqttSecurityContext {
   }
 }
 
-class MqttProvider extends AsyncNotifier<List<dynamic>> {
+class MqttProvider extends AsyncNotifier<List<int>> {
   MqttServerClient? client;
   BuildContext? context;
   double? height;
@@ -51,7 +51,7 @@ class MqttProvider extends AsyncNotifier<List<dynamic>> {
 
   //
   @override
-  Future<List<dynamic>> build() async {
+  Future<List<int>> build() async {
     final prefs = await SharedPreferences.getInstance();
     final connectionPort =
         prefs.getInt('brokerPort') ??
@@ -178,6 +178,21 @@ class MqttProvider extends AsyncNotifier<List<dynamic>> {
     final recMess = mqtt?[0].payload as MqttPublishMessage;
     final data = recMess.payload.message.buffer.asByteData();
 
+    if (topic == TopicsIn.topicBoxTotal.name) {
+      numberOfSmallBoxes = data.getUint32(0);
+      log("numberOfSmallBoxes: $numberOfSmallBoxes");
+
+      numberOfBigBoxes = data.getUint32(4);
+      log("numberOfBigBoxes: $numberOfBigBoxes");
+      totalBoxes = numberOfSmallBoxes + numberOfBigBoxes;
+      state = AsyncValue.data([
+        totalBoxes,
+        numberOfBigBoxes,
+        numberOfSmallBoxes,
+      ]);
+      return;
+    }
+
     if (topic == TopicsIn.topicBoxCountBig.name) {
       final boxCount = data.getUint32(0);
       if (boxCount == 0) {
@@ -240,6 +255,7 @@ class MqttProvider extends AsyncNotifier<List<dynamic>> {
       margin: EdgeInsets.only(bottom: 16, right: 16, left: 16),
     );
     ScaffoldMessenger.of(context!).showSnackBar(snackBar);
+    publish(Topics.connectedTopic.name, true);
   }
 
   void onDisconnected() {
@@ -273,6 +289,6 @@ class MqttProvider extends AsyncNotifier<List<dynamic>> {
   }
 }
 
-final mqttProvider = AsyncNotifierProvider<MqttProvider, List<dynamic>>(() {
+final mqttProvider = AsyncNotifierProvider<MqttProvider, List<int>>(() {
   return MqttProvider();
 });
