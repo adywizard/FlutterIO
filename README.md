@@ -25,6 +25,8 @@ for local communication you can use open source Mosquitto broker, download link:
 Guide for setting it up: https://www.youtube.com/watch?v=2S_kZo_ElxY
 Give a credit to that guy!
 
+Short video at this link: https://youtu.be/geyDemxGkSw be aware that quality of the video is not so grate!
+
 
 ![Screenshot](screenshots/home.jpeg)
 
