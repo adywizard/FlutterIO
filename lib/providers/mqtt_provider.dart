@@ -172,6 +172,22 @@ class MqttProvider extends AsyncNotifier<List<int>> {
     return false;
   }
 
+  bool publishInt(String topic, int value) {
+    if (client?.connectionStatus!.state == MqttConnectionState.connected &&
+        value <= 2147483647 &&
+        value >= 0) {
+      final builder = MqttClientPayloadBuilder();
+
+      value = ChangeEndian.fromLittleEndian(value);
+
+      builder.addInt(value);
+      client?.publishMessage(topic, MqttQos.atLeastOnce, builder.payload!);
+      log("published message: $value to topic: $topic");
+      return true;
+    }
+    return false;
+  }
+
   void _onData(List<MqttReceivedMessage<MqttMessage?>>? mqtt) async {
     final topic = mqtt?[0].topic;
     log("client received topic: $topic");
@@ -244,6 +260,12 @@ class MqttProvider extends AsyncNotifier<List<int>> {
       return;
     } else if (topic == TopicsIn.topicAtRight.name) {
       _showSensorMessage("At Right sensor triggered $sensorState");
+      return;
+    } else if (topic == TopicsIn.topicBoxHeight.name) {
+      final boxHeight = data.getUint8(0);
+      _showSensorMessage(
+        "Box height: ${boxHeight == 1 ? "High box" : "Low box"}",
+      );
       return;
     }
   }

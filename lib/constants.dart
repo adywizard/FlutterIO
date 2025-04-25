@@ -9,6 +9,7 @@ const clientId = 'factoryio_app';
 
 // Other constants
 const title = 'FactoryIO Sorting App ';
+const chartPageTitle = "Chart";
 const defaultUsername = 'No username';
 const defaultPassword = 'No password';
 const credTitle = "Set credentials";

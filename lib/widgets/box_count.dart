@@ -77,12 +77,11 @@ class BoxesNumber extends ConsumerWidget {
     if (provider.hasValue) {
       count = provider.value?[0] ?? 0;
     }
-
     return Text(
       count.toString(),
       textAlign: TextAlign.center,
       style: TextStyle(
-        fontSize: 96.0,
+        fontSize: 96,
         fontWeight: FontWeight.bold,
         color: color ?? Colors.black87,
       ),

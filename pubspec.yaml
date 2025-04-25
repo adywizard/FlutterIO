@@ -8,11 +8,12 @@ environment:
 
 dependencies:
   dynamic_color: ^1.7.0
-  file_picker: ^10.0.0
+  file_picker: ^10.1.2
   fl_chart: ^0.71.0
   flutter:
     sdk: flutter
   flutter_riverpod: ^2.6.1
+  gauge_indicator: ^0.4.3
   google_fonts: ^6.2.1
   mqtt_client: ^10.8.0
   shared_preferences: ^2.5.3

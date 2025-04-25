@@ -16,7 +16,8 @@ enum Topics {
   topicSemi(name: '/start/semiAuto', description: 'Unload line'),
   willTopic(name: '/last/will/app', description: 'I died'),
   diconnectedTopic(name: '/app/diconnected', description: 'Disconnected Topic'),
-  connectedTopic(name: '/app/connected', description: 'Connected Topic');
+  connectedTopic(name: '/app/connected', description: 'Connected Topic'),
+  topicDailyGoal(name: '/dailyBoxesGoal', description: 'Daily Goal');
 
   const Topics({required this.name, required this.description});
 
@@ -37,7 +38,8 @@ enum TopicsIn {
   topicBoxCountBig(name: '/sensors/boxCountBig', description: 'Box Count Big'),
   topicBoxTotal(name: 'sensors/boxTotal', description: 'Box Count Total'),
 
-  topicPlcOnline(name: 'plc/online', description: 'PLC Online');
+  topicPlcOnline(name: 'plc/online', description: 'PLC Online'),
+  topicBoxHeight(name: '/sensors/boxHeight', description: 'Box Height');
 
   const TopicsIn({required this.name, required this.description});
 
