@@ -1,7 +1,8 @@
 import 'package:factoryio_app/all_imports.dart';
 
 class SettingsBody extends ConsumerWidget {
-  const SettingsBody({super.key});
+  const SettingsBody({super.key, required this.backgroundColor});
+  final Color backgroundColor;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -10,9 +11,11 @@ class SettingsBody extends ConsumerWidget {
         padding: const EdgeInsets.all(8.0),
 
         children: [
-          const Text(
-            'User',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          TextWidget(
+            text: 'User',
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            backgroundColor: backgroundColor,
           ),
           Divider(),
           SettingsTile(
@@ -26,9 +29,11 @@ class SettingsBody extends ConsumerWidget {
           ),
           Divider(),
           const SizedBox(height: 20),
-          const Text(
-            'Broker',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          TextWidget(
+            text: 'Broker',
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            backgroundColor: backgroundColor,
           ),
           Divider(),
           SettingsTile(
@@ -42,9 +47,11 @@ class SettingsBody extends ConsumerWidget {
           ),
           Divider(),
           SizedBox(height: 20),
-          const Text(
-            'Certificates',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          TextWidget(
+            text: 'Certificates',
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            backgroundColor: backgroundColor,
           ),
           Divider(),
           SettingsTile(
@@ -62,6 +69,18 @@ class SettingsBody extends ConsumerWidget {
             providerType: SettingsProviderType.privateKeyProviderType,
           ),
           Divider(),
+          SizedBox(height: 20),
+          TextWidget(
+            text: 'Theme',
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            backgroundColor: backgroundColor,
+          ),
+          Divider(),
+          SettingsTile(
+            type: SettingsType.backgroundColor,
+            providerType: SettingsProviderType.backgroundColorProviderType,
+          ),
         ],
       ),
     );

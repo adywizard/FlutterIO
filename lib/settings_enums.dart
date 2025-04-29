@@ -1,7 +1,9 @@
+import 'package:factoryio_app/providers/background_color_provider.dart';
 import 'package:factoryio_app/providers/settings_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 enum SettingsType {
+  backgroundColor(name: 'Background color'),
   brokerAddress(name: 'Broker address'),
   brokerPort(name: 'Broker port'),
   brokerUsername(name: 'Username'),
@@ -15,6 +17,7 @@ enum SettingsType {
 }
 
 enum SettingsProviderType {
+  backgroundColorProviderType(name: 'Background color provider'),
   brokerUsernameProviderType(name: 'Broker username provider'),
   brokerPasswordProviderType(name: 'Broker password provider'),
   brokerAddressProviderType(name: 'Broker address provider'),
@@ -42,6 +45,8 @@ enum SettingsProviderType {
         return deviceCertProvider as T;
       case SettingsProviderType.privateKeyProviderType:
         return privateKeyProvider as T;
+      case SettingsProviderType.backgroundColorProviderType:
+        return backgroundColorProvider as T;
     }
   }
 }

@@ -51,6 +51,11 @@ class SettingsTile extends ConsumerWidget {
           ref.read(privateKeyProvider.notifier).setFilePath(filePath);
         }
         break;
+      case SettingsType.backgroundColor:
+        String? color = await DialogsHelper.setBackgroundColorDialog(context);
+        if (color != null) {
+          ref.read(backgroundColorProvider.notifier).setColor(color);
+        }
     }
   }
 
@@ -70,6 +75,8 @@ class SettingsTile extends ConsumerWidget {
         return Icons.file_upload;
       case SettingsType.brokerPrivateKey:
         return Icons.file_upload;
+      case SettingsType.backgroundColor:
+        return Icons.color_lens;
     }
   }
 
@@ -101,6 +108,8 @@ class SettingsTile extends ConsumerWidget {
         return value.split('/').last;
       case SettingsType.brokerPrivateKey:
         return value.split('/').last;
+      case SettingsType.backgroundColor:
+        return value == "null" ? defaultBackroundColorDescription : value;
     }
   }
 
@@ -110,13 +119,12 @@ class SettingsTile extends ConsumerWidget {
     bool showUnmasked = false;
     return Card(
       elevation: 0,
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
       child: StatefulBuilder(
         builder:
             (context, setState) => ListTile(
               tileColor: Theme.of(context).colorScheme.onInverseSurface,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16.0),
-              ),
               title: Text(type.name),
               subtitle: Text(
                 provider.hasValue

@@ -17,6 +17,7 @@ dependencies:
   google_fonts: ^6.2.1
   mqtt_client: ^10.8.0
   shared_preferences: ^2.5.3
+  window_manager: ^0.4.3
 
 dev_dependencies:
   flutter_test:

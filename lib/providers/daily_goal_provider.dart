@@ -1,21 +1,23 @@
 import 'package:factoryio_app/all_imports.dart';
 
-class DailyGoalNotifier extends AsyncNotifier<int> {
+class DailyGoalNotifier extends AsyncNotifier<List<int>> {
+  int dailyGoal = 0;
   @override
-  Future<int> build() async {
+  Future<List<int>> build() async {
     final prefs = await SharedPreferences.getInstance();
-    final dailyGoal = prefs.getInt('dailyGoal');
-    return dailyGoal ?? 100;
+    dailyGoal = prefs.getInt('dailyGoal') ?? 100;
+    return [dailyGoal];
   }
 
-  Future<void> setDailyGoal(int dailyGoal) async {
-    state = const AsyncValue.loading();
+  Future<void> setDailyGoal(int newDAilyGoal) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('dailyGoal', dailyGoal);
-    state = AsyncValue.data(dailyGoal);
+    await prefs.setInt('dailyGoal', newDAilyGoal);
+    state = AsyncValue.data([newDAilyGoal]);
   }
 }
 
-final dailyGoalProvider = AsyncNotifierProvider<DailyGoalNotifier, int>(() {
-  return DailyGoalNotifier();
-});
+final dailyGoalProvider = AsyncNotifierProvider<DailyGoalNotifier, List<int>>(
+  () {
+    return DailyGoalNotifier();
+  },
+);

@@ -8,12 +8,14 @@ const defaultPort = 8883;
 const clientId = 'factoryio_app';
 
 // Other constants
-const title = 'FactoryIO Sorting App ';
+const homePageTitle = 'FactoryIO Sorting App ';
+const settingsPageTitle = 'Settings';
 const chartPageTitle = "Chart";
 const defaultUsername = 'No username';
 const defaultPassword = 'No password';
 const credTitle = "Set credentials";
 const noFilePath = 'No file selected';
+const defaultBackroundColorDescription = "Default";
 
 // Set this to true to enable logging
 const bool logging = false;

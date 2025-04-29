@@ -1,4 +1,5 @@
 import 'package:factoryio_app/all_imports.dart';
+import 'package:factoryio_app/providers/online_provider.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -8,6 +9,7 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
+  Color? backgroundColor;
   @override
   void initState() {
     super.initState();
@@ -31,14 +33,23 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).colorScheme.surfaceContainerHighest;
+    final state = ref.watch(backgroundColorProvider);
+
+    if (state.hasValue) {
+      backgroundColor = ColorResolver.getColor(state.value, context);
+    }
+
     return Scaffold(
-      backgroundColor: color,
+      backgroundColor: backgroundColor,
+
       appBar: AppBar(
-        title: const Text(title),
-        backgroundColor: color,
+        title: TextWidget(
+          text: homePageTitle,
+          backgroundColor: backgroundColor ?? Colors.transparent,
+        ),
+        backgroundColor: backgroundColor,
         actions: [
-          if (Platform.isWindows || Platform.isLinux || Platform.isMacOS)
+          if (PlatformType.isDesktop)
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: IconButton.filledTonal(
@@ -64,7 +75,46 @@ class _HomePageState extends ConsumerState<HomePage> {
         onRefresh: () async {
           _onRefresh(context);
         },
-        child: Stack(children: [HomePageBody()]),
+        child: Stack(children: [HomePageBody(), StatusBar()]),
+      ),
+    );
+  }
+}
+
+class StatusBar extends ConsumerWidget {
+  const StatusBar({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(onlineProvider);
+    bool appOnline = state.hasValue ? state.value![0] : false;
+    bool plcOnline = state.hasValue ? state.value![1] : false;
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: SizedBox(
+        width: double.maxFinite,
+        child: BottomAppBar(
+          height: 46,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            spacing: 16,
+            children: [
+              Text('App'),
+              Icon(
+                Icons.circle,
+                color: appOnline ? Colors.green : Colors.red,
+                size: 12,
+              ),
+              Expanded(child: SizedBox()),
+              Text('PLC'),
+              Icon(
+                Icons.circle,
+                color: plcOnline ? Colors.green : Colors.red,
+                size: 12,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:factoryio_app/all_imports.dart';
 
-class Chart extends ConsumerWidget {
-  const Chart({super.key});
+class ChartPage extends ConsumerWidget {
+  const ChartPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -18,10 +18,12 @@ class Chart extends ConsumerWidget {
     }
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
+
+    final isMobile = PlatformType.isMobile;
     final radius =
-        isPortrait
-            ? MediaQuery.of(context).size.width * 0.5 - 56
-            : MediaQuery.of(context).size.height * 0.5 - 76;
+        isPortrait && isMobile
+            ? MediaQuery.of(context).size.width * 0.5 - 76
+            : MediaQuery.of(context).size.height * 0.5 - 126;
 
     final small = (state.value?[2] ?? 0).toDouble();
     final big = (state.value?[1] ?? 0).toDouble();
@@ -35,25 +37,38 @@ class Chart extends ConsumerWidget {
       appBar: AppBar(
         title: const Text(chartPageTitle),
         centerTitle: isPortrait ? false : true,
-        actions: isPortrait ? [DailyGoalAction()] : null,
+        actions:
+            isPortrait && PlatformType.isMobile
+                ? [DailyGoalAction()]
+                : PlatformType.isDesktop
+                ? [DailyGoalAction()]
+                : null,
+        leading: IconButton.filledTonal(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ),
 
-      body: ParentOrientation(
-        children: [
-          Expanded(child: GoalGauge(total: total, radius: radius + 15)),
-          Expanded(
-            child: BodyTotalNonZero(
-              radius: radius,
-              total: total,
-              big: big,
-              small: small,
-              smaller: smaller,
-              bigger: bigger,
-              percBig: percBig,
-              percSmall: percSmall,
+      body: SafeArea(
+        child: ParentOrientation(
+          children: [
+            Expanded(child: GoalGauge(total: total, radius: radius + 15)),
+            Expanded(
+              child: BodyTotalNonZero(
+                radius: radius,
+                total: total,
+                big: big,
+                small: small,
+                smaller: smaller,
+                bigger: bigger,
+                percBig: percBig,
+                percSmall: percSmall,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -83,57 +98,71 @@ class DailyGoalAction extends ConsumerWidget {
   }
 }
 
-class GoalGauge extends ConsumerWidget {
+class GoalGauge extends ConsumerStatefulWidget {
   const GoalGauge({super.key, required this.total, required this.radius});
 
   final double total;
   final double radius;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<GoalGauge> createState() => _GoalGaugeState();
+}
+
+class _GoalGaugeState extends ConsumerState<GoalGauge> {
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(dailyGoalProvider);
+
     final isLoading = state.isLoading;
     if (isLoading) {
       return const CircularProgressIndicator();
     }
-    final dailyGoal = state.hasValue ? state.value ?? 100 : 100;
+
+    final dailyGoal =
+        (state.hasValue && state.value != null ? state.value![0] : 100);
+
     return Stack(
       alignment: Alignment.center,
       children: [
-        AnimatedRadialGauge(
-          builder:
-              (context, child, value) => Align(
-                alignment: Alignment.bottomCenter,
-                child: Text(
-                  "${value.round()} / $dailyGoal",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                ),
-              ),
-          duration: const Duration(milliseconds: 1000),
-          value: total,
+        AnimatedScale(
+          duration: const Duration(milliseconds: 300),
+          scale: 1,
           curve: Curves.easeInOutBack,
-          radius: radius,
-          axis: GaugeAxis(
-            min: 0,
-            max: dailyGoal.toDouble(),
+          child: AnimatedRadialGauge(
+            builder:
+                (context, child, value) => Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Text(
+                    "${value.round()} / $dailyGoal",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                  ),
+                ),
+            duration: const Duration(milliseconds: 1000),
+            value: widget.total,
+            curve: Curves.easeInOutBack,
+            radius: widget.radius,
+            axis: GaugeAxis(
+              min: 0,
+              max: dailyGoal.toDouble(),
 
-            degrees: 270,
+              degrees: 270,
 
-            style: GaugeAxisStyle(
-              thickness: 20,
-              background: Theme.of(context).colorScheme.secondaryContainer,
-              segmentSpacing: 4,
-            ),
+              style: GaugeAxisStyle(
+                thickness: 20,
+                background: Theme.of(context).colorScheme.secondaryContainer,
+                segmentSpacing: 4,
+              ),
 
-            pointer: GaugePointer.needle(
-              width: 16,
-              height: radius,
-              borderRadius: 16,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
+              pointer: GaugePointer.needle(
+                width: 16,
+                height: widget.radius,
+                borderRadius: 16,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
 
-            progressBar: GaugeProgressBar.rounded(
-              color: Theme.of(context).colorScheme.primary,
+              progressBar: GaugeProgressBar.rounded(
+                color: Theme.of(context).colorScheme.primary,
+              ),
             ),
           ),
         ),
@@ -245,13 +274,29 @@ class BodyTotalNonZero extends StatelessWidget {
   }
 }
 
-class WidgetTotalZero extends StatelessWidget {
+class WidgetTotalZero extends ConsumerWidget {
   const WidgetTotalZero({super.key});
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(dailyGoalProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text("Chart"), actions: [DailyGoalAction()]),
-      body: Center(child: const Text("No data available")),
+      appBar: AppBar(
+        title: const Text("Chart"),
+        actions: [DailyGoalAction()],
+        leading: IconButton.filledTonal(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
+      body: Center(
+        child: Text(
+          "Daily goal ${state.value?[0]}",
+          style: TextStyle(fontSize: 26),
+        ),
+      ),
     );
   }
 }

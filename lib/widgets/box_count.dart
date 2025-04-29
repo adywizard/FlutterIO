@@ -16,7 +16,7 @@ class BoxCount extends ConsumerWidget {
           () => Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) {
-                return const Chart();
+                return const ChartPage();
               },
             ),
           ),
@@ -33,7 +33,11 @@ class BoxCount extends ConsumerWidget {
                 child: Text(
                   "Total boxes produced",
                   style: TextStyle(
-                    fontSize: 24.0,
+                    fontSize:
+                        MediaQuery.of(context).orientation ==
+                                Orientation.portrait
+                            ? 24
+                            : 18,
                     fontWeight: FontWeight.bold,
                     color: textColor ?? Colors.black87,
                   ),
@@ -81,7 +85,10 @@ class BoxesNumber extends ConsumerWidget {
       count.toString(),
       textAlign: TextAlign.center,
       style: TextStyle(
-        fontSize: 96,
+        fontSize:
+            MediaQuery.of(context).orientation == Orientation.portrait
+                ? 96
+                : 62,
         fontWeight: FontWeight.bold,
         color: color ?? Colors.black87,
       ),

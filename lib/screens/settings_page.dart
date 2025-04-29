@@ -5,13 +5,35 @@ class SettingsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final color = Theme.of(context).colorScheme.surfaceContainerHighest;
+    final state = ref.watch(backgroundColorProvider);
+    Color? backgroundColor;
+    if (state.hasValue) {
+      backgroundColor = ColorResolver.getColor(state.value, context);
+    }
     return Scaffold(
-      backgroundColor: color,
-      appBar: AppBar(title: const Text('Settings'), backgroundColor: color),
+      backgroundColor: backgroundColor,
+      appBar: AppBar(
+        title: TextWidget(
+          text: settingsPageTitle,
+          backgroundColor: backgroundColor ?? Colors.transparent,
+        ),
+        backgroundColor: backgroundColor,
+        leading: IconButton.filledTonal(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Stack(children: [SettingsBody()]),
+        child: Stack(
+          children: [
+            SettingsBody(
+              backgroundColor: backgroundColor ?? Colors.transparent,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -25,6 +25,7 @@ class _MainAppState extends ConsumerState<MainApp> with WidgetsBindingObserver {
     super.didChangeAppLifecycleState(state);
     switch (state) {
       case AppLifecycleState.resumed:
+        ref.read(mqttProvider.notifier).connect();
         break;
       case AppLifecycleState.inactive:
         break;
@@ -32,6 +33,7 @@ class _MainAppState extends ConsumerState<MainApp> with WidgetsBindingObserver {
         ref
             .read(mqttProvider.notifier)
             .publish(Topics.diconnectedTopic.name, true);
+        ref.read(mqttProvider.notifier).disconnect();
         break;
       case AppLifecycleState.detached:
         break;
@@ -47,9 +49,9 @@ class _MainAppState extends ConsumerState<MainApp> with WidgetsBindingObserver {
         final lightColorScheme =
             lightDynamic ??
             ColorScheme.fromSeed(
-              seedColor: const Color(0xFF6750A4),
+              seedColor: const Color.fromARGB(255, 68, 85, 109),
               brightness: Brightness.light,
-              surfaceContainerHighest: const Color(0xFFFBFBFE),
+              surfaceContainerHighest: const Color.fromARGB(255, 90, 52, 151),
             ).harmonized();
         final darkColorScheme =
             darkDynamic ??

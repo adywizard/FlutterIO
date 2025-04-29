@@ -17,6 +17,7 @@ export 'package:factoryio_app/settings_enums.dart';
 export 'package:factoryio_app/providers/settings_providers.dart';
 export 'package:factoryio_app/providers/daily_goal_provider.dart';
 export 'package:factoryio_app/screens/settings_page.dart';
+export 'package:factoryio_app/providers/background_color_provider.dart';
 export 'package:factoryio_app/providers/mqtt_provider.dart';
 export 'package:factoryio_app/screens/home_page.dart';
 export 'package:factoryio_app/widgets/home_page_body.dart';
@@ -25,6 +26,8 @@ export 'package:factoryio_app/widgets/small_big_box_number.dart';
 export 'package:factoryio_app/widgets/orientation_widget.dart';
 export 'package:factoryio_app/topics_enums.dart';
 export 'package:factoryio_app/widgets/topic_message.dart';
+export 'package:factoryio_app/widgets/dialog_option_child.dart';
+export 'package:factoryio_app/widgets/text_widget.dart';
 
 // thierd party packages
 export 'package:shared_preferences/shared_preferences.dart';

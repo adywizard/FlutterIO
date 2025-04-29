@@ -11,41 +11,49 @@ class HomePageBody extends StatelessWidget {
       Expanded(
         flex: 1,
         child: SafeArea(
-          child: GridView.count(
-            crossAxisCount: 1,
-            childAspectRatio: aspectRatio - 0.05,
+          bottom: false,
+          child: Container(
+            color: Colors.transparent,
+            child: GridView.count(
+              crossAxisCount: 1,
+              childAspectRatio: aspectRatio - 0.15,
 
-            children: [
-              BoxCount(
-                color: Theme.of(context).colorScheme.onInverseSurface,
-                textColor: Theme.of(context).colorScheme.inverseSurface,
-              ),
-            ],
+              children: [
+                BoxCount(
+                  color: Theme.of(context).colorScheme.onInverseSurface,
+                  textColor: Theme.of(context).colorScheme.inverseSurface,
+                ),
+              ],
+            ),
           ),
         ),
       ),
       Expanded(
         flex: 1,
         child: SafeArea(
-          child: GridView.count(
-            mainAxisSpacing: 6,
-            crossAxisSpacing: 6,
-            crossAxisCount: 3,
-            childAspectRatio: aspectRatio,
-            padding: const EdgeInsets.all(16),
-            children: [
-              for (int i = 0; i < Topics.values.length - 4; i++)
-                MqttButton(
-                  topic: Topics.values[i].name,
-                  label: Topics.values[i].description,
-                  color: Theme.of(context).colorScheme.onInverseSurface,
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSecondaryContainer,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+          top: false,
+          child: Container(
+            color: Colors.transparent,
+            child: GridView.count(
+              mainAxisSpacing: 6,
+              crossAxisSpacing: 6,
+              crossAxisCount: 3,
+              childAspectRatio: aspectRatio,
+              padding: const EdgeInsets.all(16),
+              children: [
+                for (int i = 0; i < Topics.values.length - 4; i++)
+                  MqttButton(
+                    topic: Topics.values[i].name,
+                    label: Topics.values[i].description,
+                    color: Theme.of(context).colorScheme.onInverseSurface,
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -57,7 +65,7 @@ class HomePageBody extends StatelessWidget {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
     return isPortrait
-        ? Column(spacing: 12, children: getBody(context, 1.2))
-        : Row(children: getBody(context, 1.4));
+        ? Column(spacing: 0, children: getBody(context, 1.4))
+        : Row(children: getBody(context, 1.8));
   }
 }

@@ -1,4 +1,5 @@
 import 'package:factoryio_app/all_imports.dart';
+import 'package:factoryio_app/providers/online_provider.dart';
 
 class MqttSecurityContext {
   static Future<SecurityContext> get context async {
@@ -41,6 +42,8 @@ class MqttProvider extends AsyncNotifier<List<int>> {
   int numberOfBigBoxes = 0;
   int numberOfSmallBoxes = 0;
   int totalBoxes = 0;
+  bool plcOnline = false;
+  bool appOnline = false;
 
   void setContext(BuildContext context) {
     this.context = context;
@@ -70,6 +73,7 @@ class MqttProvider extends AsyncNotifier<List<int>> {
     if ((password?.isEmpty ?? true) || password == defaultPassword) {
       password = null;
     }
+    //
     log("building mqtt client");
     if (client != null &&
         client?.connectionStatus?.state == MqttConnectionState.connected) {
@@ -84,15 +88,42 @@ class MqttProvider extends AsyncNotifier<List<int>> {
     client?.keepAlivePeriod = 20;
     client?.setProtocolV311();
     client?.onBadCertificate = _onBadCertificate;
-    await connect(client, username, password);
+    await connect();
     return [totalBoxes, numberOfBigBoxes, numberOfSmallBoxes];
   }
 
-  Future<void> connect(
-    MqttClient? client,
-    String? username,
-    String? password,
-  ) async {
+  Future<void> connect() async {
+    if (client != null &&
+        client?.connectionStatus?.state == MqttConnectionState.connected) {
+      return;
+    }
+
+    final prefs = await SharedPreferences.getInstance();
+    final connectionPort =
+        prefs.getInt('brokerPort') ??
+        ref.read(brokerPortProvider).value ??
+        defaultPort;
+    final address =
+        prefs.getString('brokerAddress') ??
+        ref.read(brokerAddressProvider).value ??
+        defaultBrokerAddress;
+    String? username = prefs.getString('username');
+    String? password = prefs.getString('password');
+
+    if ((username?.isEmpty ?? true) || username == defaultUsername) {
+      username = null;
+    }
+    if ((password?.isEmpty ?? true) || password == defaultPassword) {
+      password = null;
+    }
+    client = MqttServerClient.withPort(address, clientId, connectionPort);
+
+    client?.securityContext = await MqttSecurityContext.context;
+    connectionPort == 8883 ? client?.secure = true : client?.secure = false;
+
+    client?.keepAlivePeriod = 20;
+    client?.setProtocolV311();
+    client?.onBadCertificate = _onBadCertificate;
     log("client is not connected, connecting...");
     client?.logging(on: logging);
     log("connect method of mqtt client");
@@ -130,6 +161,17 @@ class MqttProvider extends AsyncNotifier<List<int>> {
       client?.disconnect();
     }
     client?.updates?.listen(_onData);
+  }
+
+  void reconnectOnResume() async {
+    if ((client?.connectionStatus?.state != MqttConnectionState.connected ||
+            client?.connectionStatus?.state !=
+                MqttConnectionState.connecting) &&
+        client != null) {
+      client?.connect();
+    } else {
+      await connect();
+    }
   }
 
   bool _onBadCertificate(Object a) {
@@ -193,6 +235,9 @@ class MqttProvider extends AsyncNotifier<List<int>> {
     log("client received topic: $topic");
     final recMess = mqtt?[0].payload as MqttPublishMessage;
     final data = recMess.payload.message.buffer.asByteData();
+    plcOnline = true;
+    appOnline = true;
+    ref.read(onlineProvider.notifier).setStatus(appOnline, plcOnline);
 
     if (topic == TopicsIn.topicBoxTotal.name) {
       numberOfSmallBoxes = data.getUint32(0);
@@ -201,6 +246,10 @@ class MqttProvider extends AsyncNotifier<List<int>> {
       numberOfBigBoxes = data.getUint32(4);
       log("numberOfBigBoxes: $numberOfBigBoxes");
       totalBoxes = numberOfSmallBoxes + numberOfBigBoxes;
+
+      final dailyGoal = data.getUint32(8);
+      ref.read(dailyGoalProvider.notifier).setDailyGoal(dailyGoal);
+
       state = AsyncValue.data([
         totalBoxes,
         numberOfBigBoxes,
@@ -240,13 +289,25 @@ class MqttProvider extends AsyncNotifier<List<int>> {
       return;
     }
 
+    if (topic == TopicsIn.topicPlcOnline.name) {
+      _showSensorMessage("PLC is online");
+      numberOfSmallBoxes = data.getUint32(0);
+      numberOfBigBoxes = data.getUint32(4);
+      totalBoxes = numberOfSmallBoxes + numberOfBigBoxes;
+      final dailyGoal = data.getUint32(8);
+      ref.read(dailyGoalProvider.notifier).setDailyGoal(dailyGoal);
+      state = AsyncValue.data([
+        totalBoxes,
+        numberOfBigBoxes,
+        numberOfSmallBoxes,
+      ]);
+      return;
+    }
+
     final message = data.getUint8(0);
     final sensorState = message == 1 ? "ON" : "OFF";
 
-    if (topic == TopicsIn.topicPlcOnline.name) {
-      _showSensorMessage("PLC is online");
-      return;
-    } else if (topic == TopicsIn.topicAtEntry.name) {
+    if (topic == TopicsIn.topicAtEntry.name) {
       _showSensorMessage("At Entry sensor triggered $sensorState");
       return;
     } else if (topic == TopicsIn.topicAtLoad.name) {
@@ -274,10 +335,16 @@ class MqttProvider extends AsyncNotifier<List<int>> {
     log("disconnecting mqtt client");
     client?.disconnect();
     log("mqtt client disconnected");
+    appOnline = false;
+    plcOnline = false;
+    ref.read(onlineProvider.notifier).setStatus(appOnline, plcOnline);
   }
 
   void onConnected() {
     log('Connected');
+    appOnline = true;
+    plcOnline = false;
+    ref.read(onlineProvider.notifier).setStatus(appOnline, plcOnline);
     for (var topic in TopicsIn.values) {
       client?.subscribe(topic.name, MqttQos.atLeastOnce);
     }
@@ -293,6 +360,9 @@ class MqttProvider extends AsyncNotifier<List<int>> {
   }
 
   void onDisconnected() {
+    plcOnline = false;
+    appOnline = false;
+    ref.read(onlineProvider.notifier).setStatus(appOnline, plcOnline);
     if (context != null && (context?.mounted ?? false)) {
       ScaffoldMessenger.of(context!).clearSnackBars();
       final snackBar = TopicMessageSnackBar(
