@@ -43,11 +43,14 @@ class ChartPage extends ConsumerWidget {
                 : PlatformType.isDesktop
                 ? [DailyGoalAction()]
                 : null,
-        leading: IconButton.filledTonal(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: IconButton.filledTonal(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
         ),
       ),
 
@@ -260,7 +263,7 @@ class BodyTotalNonZero extends StatelessWidget {
         Align(
           alignment: Alignment.topCenter,
           child: Text(
-            "Chart",
+            "Stats",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 18,

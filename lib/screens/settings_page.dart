@@ -18,11 +18,14 @@ class SettingsPage extends ConsumerWidget {
           backgroundColor: backgroundColor ?? Colors.transparent,
         ),
         backgroundColor: backgroundColor,
-        leading: IconButton.filledTonal(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: IconButton.filledTonal(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
         ),
       ),
       body: Padding(

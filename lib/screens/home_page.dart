@@ -94,7 +94,7 @@ class StatusBar extends ConsumerWidget {
       child: SizedBox(
         width: double.maxFinite,
         child: BottomAppBar(
-          height: 46,
+          height: PlatformType.isMobile ? 46 : null,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             spacing: 16,
@@ -105,7 +105,11 @@ class StatusBar extends ConsumerWidget {
                 color: appOnline ? Colors.green : Colors.red,
                 size: 12,
               ),
-              Expanded(child: SizedBox()),
+              Expanded(
+                child: SizedBox(
+                  child: Text("Connection", textAlign: TextAlign.center),
+                ),
+              ),
               Text('PLC'),
               Icon(
                 Icons.circle,
