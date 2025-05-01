@@ -139,23 +139,6 @@ class StatusBar extends ConsumerWidget {
                   ),
                 ),
               ),
-              // Text('App'),
-              // Icon(
-              //   Icons.circle,
-              //   color: appOnline ? Colors.green : Colors.red,
-              //   size: 12,
-              // ),
-              // Expanded(
-              //   child: SizedBox(
-              //     child: Text("Connection", textAlign: TextAlign.center),
-              //   ),
-              // ),
-              // Text('PLC'),
-              // Icon(
-              //   Icons.circle,
-              //   color: plcOnline ? Colors.green : Colors.red,
-              //   size: 12,
-              // ),
             ],
           ),
         ),
