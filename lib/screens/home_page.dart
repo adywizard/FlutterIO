@@ -94,28 +94,68 @@ class StatusBar extends ConsumerWidget {
       child: SizedBox(
         width: double.maxFinite,
         child: BottomAppBar(
-          height: PlatformType.isMobile ? 46 : null,
+          height: PlatformType.isMobile ? 60 : null,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             spacing: 16,
             children: [
-              Text('App'),
-              Icon(
-                Icons.circle,
-                color: appOnline ? Colors.green : Colors.red,
-                size: 12,
+              Chip(
+                avatar: Icon(
+                  Icons.circle,
+                  color: appOnline ? Colors.green : Colors.red,
+                  size: PlatformType.isMobile ? 10 : null,
+                ),
+                label: Text(
+                  "App",
+                  style: TextStyle(
+                    color: appOnline ? Colors.green : Colors.red,
+                    fontSize: PlatformType.isMobile ? 10 : null,
+                  ),
+                ),
               ),
               Expanded(
                 child: SizedBox(
-                  child: Text("Connection", textAlign: TextAlign.center),
+                  child: Text(
+                    "Connection\nstatus",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontSize: PlatformType.isMobile ? 10 : null,
+                    ),
+                  ),
                 ),
               ),
-              Text('PLC'),
-              Icon(
-                Icons.circle,
-                color: plcOnline ? Colors.green : Colors.red,
-                size: 12,
+              Chip(
+                avatar: Icon(
+                  Icons.circle,
+                  color: plcOnline ? Colors.green : Colors.red,
+                  size: PlatformType.isMobile ? 10 : null,
+                ),
+                label: Text(
+                  "PLC",
+                  style: TextStyle(
+                    color: plcOnline ? Colors.green : Colors.red,
+                    fontSize: PlatformType.isMobile ? 10 : null,
+                  ),
+                ),
               ),
+              // Text('App'),
+              // Icon(
+              //   Icons.circle,
+              //   color: appOnline ? Colors.green : Colors.red,
+              //   size: 12,
+              // ),
+              // Expanded(
+              //   child: SizedBox(
+              //     child: Text("Connection", textAlign: TextAlign.center),
+              //   ),
+              // ),
+              // Text('PLC'),
+              // Icon(
+              //   Icons.circle,
+              //   color: plcOnline ? Colors.green : Colors.red,
+              //   size: 12,
+              // ),
             ],
           ),
         ),
